@@ -1,0 +1,49 @@
+apiVersion: scaffolder.backstage.io/v1beta3
+kind: Template
+metadata:
+  name: create-dotnet-app
+  title: Crear proyecto .NET 
+  description: Crear app .NET y publicarlo en GitHub
+  tags:
+    - open
+spec:
+  owner: group:default/admins
+  type: service
+
+  parameters:
+    - title: App Details
+      required:
+        - name
+        - repoUrl
+      properties:
+        name:
+          type: string
+          title: Nombre de la  app
+          description: Será el nombre de la carpeta
+        repoUrl:
+          type: string
+          title: URL Github (org/repo)
+          description: Ejemplo: gryphusimc/mi-app-dotnet
+
+  steps:
+    - id: generate
+      name: Generar proyecto
+      action: fetch:template
+      input:
+        url: ./skeleton
+        values:
+          name: ${{ parameters.name }}
+
+    - id: dotnet
+      name: Crear app .NET
+      action: debug:log
+      input:
+        message: "dotnet new webapi -n ${{ parameters.name }}"
+
+    - id: publish
+      name: Publicar a GitHub
+      action: publish:github
+      input:
+        repoUrl: github.com?repo=${{ parameters.repoUrl }}&owner=gryphusimc
+        defaultBranch: main
+        description: "App creada desde backstage"
