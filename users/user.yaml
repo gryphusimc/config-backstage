@@ -2,9 +2,22 @@ apiVersion: backstage.io/v1alpha1
 kind: User
 metadata:
   name: ivan
-  description: Ivan Moya – DevOps engineer
+  description: Ivan Moya – DevOps Engineer
 spec:
   profile:
-    displayName: Ivan
-    email: ivan@example.com
-  memberOf: []
+    displayName: Ivan Moya
+    email: ivan@example.com    
+  memberOf: [admins]
+
+---
+apiVersion: backstage.io/v1alpha1
+kind: Group
+metadata:
+  name: admins
+  description: Equipo administración
+spec:
+  type: team
+  profile:
+    displayName: DevOps Team
+  children: []
+  members: [ivan]
